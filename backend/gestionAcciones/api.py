@@ -5,6 +5,9 @@ from .serializers import GestionAccionesSerializer
 import requests
 from dotenv import load_dotenv
 import os
+from django.db.models import Sum, F, FloatField, ExpressionWrapper
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 class GestionAccionesViewSet(viewsets.ModelViewSet):
     queryset = GestionAcciones.objects.all()
@@ -16,10 +19,6 @@ class GestionAccionesViewSet(viewsets.ModelViewSet):
     PROFIT_API_URL = os.environ.get('PROFIT_API_URL')
 
     # Define la URL base y el token de autenticación para la API de Profit
-    # PROFIT_API_TOKEN = "b32d8b7cd94a4ab2bda2475f652a4fcd" # !Comment
-    # PROFIT_API_URL = "https://api.profit.com/data-api/market-data/quote"
-    # PROFIT_API_URL = f"https://api.profit.com/data-api/market-data/quote/TSLA?token={PROFIT_API_TOKEN}"
-
     def obtener_precio_actual(self, nombre_accion):
         """Obtiene el precio actual de la acción desde la API de Profit."""
         url = f"{self.PROFIT_API_URL}/{nombre_accion}?token={self.PROFIT_API_TOKEN}"
@@ -61,23 +60,21 @@ class GestionAccionesViewSet(viewsets.ModelViewSet):
         instance.total_ganancia = total_ganancia
         instance.save()
 
-    # def perform_create(self, serializer):
-    #     # Guarda el objeto temporalmente sin calcular `porcentaje_ganancia` y `total_ganancia`
-    #     instance = serializer.save()
+@api_view(['GET'])
+def resumen_acciones(request):
+    """Vista para consolidar datos por acción."""
+    acciones = GestionAcciones.objects.values('nombre_accion').annotate(
+        cantidad_total=Sum('cantidad'),
+        precio_costo=ExpressionWrapper(
+            Sum(F('cantidad') * F('precio_unitario')) / Sum('cantidad'),
+            output_field=FloatField()
+        ),
+        precio_total_usd=Sum('precio_total'),
+        porcentaje_ganancia=ExpressionWrapper(
+            Sum('total_ganancia') / Sum('precio_total') * 100,
+            output_field=FloatField()
+        ),
+        total_ganancia=Sum('total_ganancia')
+    ).order_by('nombre_accion')  # Ordenar alfabéticamente por nombre de acción
 
-    #     # Obtener el precio actual de la acción usando `yfinance`
-    #     ticker = yf.Ticker(instance.nombre_accion)
-    #     precio_actual = ticker.history(period="1d")['Close'][0]  # Último precio de cierre
-
-    #     # Calcular porcentaje de ganancia
-    #     if instance.precio_unitario > 0:
-    #         porcentaje_ganancia = ((precio_actual - instance.precio_unitario) / instance.precio_unitario) * 100
-    #         total_ganancia = (porcentaje_ganancia / 100) * instance.precio_total
-    #     else:
-    #         porcentaje_ganancia = 0
-    #         total_ganancia = 0
-
-    #     # Actualizar `porcentaje_ganancia` y `total_ganancia`
-    #     instance.porcentaje_ganancia = porcentaje_ganancia
-    #     instance.total_ganancia = total_ganancia
-    #     instance.save()
+    return Response(acciones)
