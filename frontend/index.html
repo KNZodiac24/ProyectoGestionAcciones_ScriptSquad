@@ -2,16 +2,18 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VISUAM</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="https://kit.fontawesome.com/4c1912b908.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
 <body>
     <!-- Cabecera -->
     <header id="header">
-        <img src="images/img_visuam_logo.webp" alt="Logo VISUAM" width="50px">
+        <img src="images/img_visuam_logo.webp" alt="Logo VISUAM" width="50px" />
         <div class="h1-container">
             <h1>VISUAM - Gestión de Acciones del Mercado</h1>
         </div>
@@ -25,56 +27,73 @@
                 <!-- Formulario para registrar compra de acciones -->
                 <form id="frmCompra">
                     <label for="fecha_compra">Fecha de Compra:</label>
-                    <input type="date" id="fecha_compra" required>
+                    <input type="date" id="fecha_compra" required />
 
                     <label for="nombre_accion">Nombre:</label>
-                    <input type="text" id="nombre_accion" required>
+                    <input type="text" id="nombre_accion" required />
 
                     <label for="cantidad">Cantidad:</label>
-                    <input type="number" id="cantidad" step="1" required>
+                    <input type="number" id="cantidad" step="1" required />
 
                     <label for="precio_unitario">Precio Unitario:</label>
-                    <input type="number" id="precio_unitario" step="0.01" required>
+                    <input type="number" id="precio_unitario" step="0.01" required />
 
                     <button type="submit">Registrar Compra</button>
                 </form>
             </div>
+
             <div class="image-space">
+                <h2>Ganancias o Pérdidas</h2>
+                <div id="resumen"></div>
             </div>
         </div>
 
         <!-- Espacio para la tabla -->
-        <div class="table-space">
-            <h2>Historial de Compras</h2>
-            <table border="1" id="tblHistorial">
-                <thead>
-                    <tr>
-                        <th>Fecha de Compra</th>
-                        <th>Nombre</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Precio Total</th>
-                        <th>% Ganancia | Perdida</th>
-                        <th>Ganancia | Perdida</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Los registros de acciones se mostrarán aquí -->
-                </tbody>
-            </table>
+        <div class="table_space">
+            <section class="table_header">
+                <h2>Historial de Compras</h2>
+                <div class="input_group">
+                    <input type="search" placeholder="Buscar acciones..." />
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </section>
+            <section class="table_body">
+                <table border="1" id="tblHistorial">
+                    <thead>
+                        <tr>
+                            <th>Fecha de Compra <i class="fa-solid fa-arrow-up-short-wide"></i></th>
+                            <th>Nombre <i class="fa-solid fa-arrow-up-short-wide"></i></i></th>
+                            <th>Cantidad <i class="fa-solid fa-arrow-up-short-wide"></i></th>
+                            <th>$ Precio Unitario <i class="fa-solid fa-arrow-up-short-wide"></i></th>
+                            <th>Precio Total <i class="fa-solid fa-arrow-up-short-wide"></i></th>
+                            <th>% Ganancia | Perdida <i class="fa-solid fa-arrow-up-short-wide"></i></i></th>
+                            <th>$ Ganancia | Perdida <i class="fa-solid fa-arrow-up-short-wide"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los registros de acciones se mostrarán aquí -->
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
 
     <!-- Pie de pagina -->
     <footer>
-        <br>
+        <br />
         <p>&copy; 2024 VISUAM. Todos los derechos reservados.</p>
-        <p>Creado por <b>Script Squad</b>.
-        <p>Síguenos en nuestras redes sociales:</p>
-        <a href="https://www.facebook.com" target="_blank">Facebook</a> |
-        <a href="https://www.twitter.com" target="_blank">Twitter</a> |
-        <a href="https://www.instagram.com" target="_blank">Instagram</a>
-        <p><a href="mailto:contacto@scriptsquad.com">Contáctanos</a></p>
+        <p>Creado por <b>Script Squad</b>.</p>
+        <p>
+            Síguenos en nuestras redes sociales
+            <a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-square-facebook"></i></a>
+            <a href="https://www.twitter.com" target="_blank"><i class="fa-brands fa-square-x-twitter"></i></a>
+            <a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-square-instagram"></i></a>
+        </p>
+        <p>
+            <a href="mailto:contacto@scriptsquad.com">
+                <i class="fa-solid fa-envelope"></i> Contáctanos
+            </a>
+        </p>
     </footer>
 
     <!-- Enlace a script.js -->
